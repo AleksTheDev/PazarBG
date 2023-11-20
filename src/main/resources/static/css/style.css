@@ -10,8 +10,8 @@
     background-color: rgba(0, 0, 0, 27%);
 }
 
-
 body {
+    position: relative;
     background-image: url(/images/background.jpg);
     background-position: center;
     background-attachment: fixed;
@@ -19,14 +19,21 @@ body {
     margin-bottom: 5rem;
 }
 
-textarea {
-    resize: none;
+body::after {
+    content: '';
+    display: block;
+    height: 30px; /* Set same as footer's height */
 }
 
 footer {
-    position: fixed;
+    position: absolute;
     bottom: 0;
     width: 100%;
+    height: 30px;
+}
+
+textarea {
+    resize: none;
 }
 
 .img-thumb {
@@ -64,6 +71,22 @@ footer {
     width: 90%;
 }
 
+.form-adaptive {
+    width: 80%!important;
+}
+
+@media (min-width: 600px) {
+    .form-adaptive {
+        width: 50%!important;
+    }
+}
+
+@media (min-width: 1300px) {
+    .form-adaptive {
+        width: 25%!important;
+    }
+}
+
 .text-stroke{
     text-shadow:
             0.07em 0 white,
@@ -72,11 +95,16 @@ footer {
             0 -0.07em white;
 }
 
-.my-text-color{
-    color: yellow!important;
+.text-shadow-small {
+    text-shadow: 1px 1px 2px black;
 }
 
-#big-div{
+.my-text-color{
+    color: #ffc107;
+}
+
+.no-link-underline {
+    text-decoration: none;
 }
 
 .badge-secondary{

@@ -5,9 +5,9 @@
 <body>
 <header th:replace="~{fragments/commons::nav}"></header>
 <main>
-    <h1 class="text-center mt-2"><span class="badge badge-pill badge-dark">Login</span></h1>
-    <hr class="hr-3 w-25 bg-white"/>
-    <form class="mx-auto w-25 bg-blur"
+    <h1 class="text-center m-2"><span class="badge bg-secondary shadow">Login</span></h1>
+    <hr class="hr-3 bg-white mx-auto form-adaptive"/>
+    <form class="mx-auto bg-blur form-adaptive shadow rounded-4"
           th:action="@{/users/login}"
           th:method="POST">
 
@@ -17,20 +17,20 @@
 
         <div class="form-group">
             <div class="label-holder text-white d-flex justify-content-center">
-                <label for="username" class="h3 mb-2">Username</label>
+                <label for="username" class="h3 m-2">Username</label>
             </div>
             <input th:value="${username}" type="text" class="form-control" id="username" name="username"/>
         </div>
 
         <div class="form-group">
             <div class="label-holder text-white d-flex justify-content-center">
-                <label for="password" class="h3 mb-2">Password</label>
+                <label for="password" class="h3 m-2">Password</label>
             </div>
             <input type="password" class="form-control" id="password" name="password"/>
         </div>
 
         <div class="button-holder d-flex justify-content-center">
-            <button type="submit" class="btn btn-warning  mb-3">Login</button>
+            <button type="submit" class="btn btn-primary mt-3 shadow">Login</button>
         </div>
 
     </form>

@@ -5,10 +5,10 @@
 <body>
 <header th:replace="~{fragments/commons::nav}"></header>
 <main>
-    <h1 class="text-center mt-2"><span class="badge badge-pill badge-dark">Register</span></h1>
-    <hr class="hr-3 w-25 bg-white"/>
+    <h1 class="text-center m-2"><span class="badge bg-secondary shadow">Register</span></h1>
+    <hr class="hr-3 bg-white mx-auto form-adaptive"/>
 
-    <form class="mx-auto w-25 bg-blur rounded"
+    <form class="mx-auto w-25 bg-blur rounded-4 form-adaptive"
           th:method="POST"
           th:action="@{/users/register}"
           th:object="${userRegisterBindingModel}">
@@ -25,7 +25,7 @@
 
         <div class="form-group">
             <div class="label-holder text-white textCol d-flex justify-content-center">
-                <label for="email" class="h4 mb-2">Email</label>
+                <label for="email" class="h4 m-2">Email</label>
             </div>
             <input th:field="*{email}" th:value="${bindingModel != null ? bindingModel.email : ''}" th:errorclass="'is-invalid alert-danger'" type="email" class="form-control" id="email" name="email"/>
             <small th:if="${#fields.hasErrors('email')}"
@@ -35,7 +35,7 @@
 
         <div class="form-group">
             <div class="label-holder text-white textCol d-flex justify-content-center">
-                <label for="password" class="h4 mb-2">Password</label>
+                <label for="password" class="h4 m-2">Password</label>
             </div>
             <input th:field="*{password}" th:errorclass="'is-invalid alert-danger'" type="password" class="form-control" id="password" name="password"/>
             <small th:if="${#fields.hasErrors('password')}"
@@ -44,7 +44,7 @@
 
         <div class="form-group">
             <div class="label-holder text-white textCol d-flex justify-content-center">
-                <label for="confirmPassword" class="h4 mb-2">Confirm Password</label>
+                <label for="confirmPassword" class="h4 m-2">Confirm Password</label>
             </div>
             <input th:field="*{confirmPassword}" th:errorclass="'is-invalid alert-danger'" type="password" class="form-control" id="confirmPassword" name="confirmPassword"/>
             <small th:if="${#fields.hasErrors('confirmPassword')}"
@@ -53,7 +53,7 @@
         </div>
 
         <div class="button-holder d-flex justify-content-center">
-            <button type="submit" class="btn btn-warning  mb-3" value="Register">Register</button>
+            <button type="submit" class="btn btn-primary mt-3 shadow" value="Register">Register</button>
         </div>
 
     </form>

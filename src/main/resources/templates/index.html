@@ -5,24 +5,25 @@
 <body>
 <header th:replace="~{fragments/commons::nav}"></header>
 <main>
-    <div class="container bg-blur rounded mt-5 ">
-        <h1>Welcome to Dictionary App</h1>
-        <hr class="my-3 bg-white w-50"/>
+    <div class="container bg-blur rounded-4 mt-5 shadow">
+        <h1>Welcome to Pazar.bg</h1>
+        <hr class="my-3 mx-auto bg-white w-75"/>
 
         <p class="h4">
-            Dictionary App is designed to help individuals and language enthusiasts effortlessly access and
-            explore the vast world of words and their meanings. It provides a user-friendly interface with a comprehensive
-            dictionary that allows users to search for words, browse definitions, and enhance their vocabulary.
-<br>
-            Dictionary App is a valuable tool for students, writers, professionals, and anyone seeking to enrich their language skills.
-            It provides an extensive database of words and their meanings, making it a reliable companion for German, French, Spanish and Italian.</p>
-        <hr class="my-3 bg-white w-75"/>
+            Pazar.bg is an online marketplace for all kinds of goods. Here you can browse thousands of offers,
+            made by people all across Bulgaria. When you buy something, you can leave a comment on the offer's page, for other buyers to see.
+            In these comments tell people how satisfied you are with your purchase and potentially warn future buyers,
+            when there is something wrong. You can also send private messages to sellers, to ask for details on a given offer,
+            or to give feedback about your purchase.
+            You can also create offers and sell items you own.
+        </p>
+        <hr class="my-3 mx-auto bg-white w-75"/>
 
         <h3>
             <a class="text-primary" th:href="@{/users/login}">Login</a>
             if you have an account or
             <a class="text-primary" th:href="@{/users/register}">Register</a>
-            now and check our deals.
+            now and check our offers.
         </h3>
     </div>
 </main>
