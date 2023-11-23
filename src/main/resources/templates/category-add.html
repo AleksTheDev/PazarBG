@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/commons::head}"></head>
+<body>
+<header th:replace="~{fragments/commons::nav}"></header>
+<main>
+    <h1 class="text-center m-2"><span class="badge bg-secondary shadow">Add category</span></h1>
+    <hr class="hr-3 bg-white mx-auto form-adaptive"/>
+
+    <form class="mx-auto w-25 bg-blur rounded-4 form-adaptive"
+          th:method="POST"
+          th:action="@{/admin/category-add}"
+          th:object="${addCategoryBindingModel}">
+
+        <div class="form-group">
+            <div class="label-holder textCol d-flex justify-content-center">
+                <label for="name" class="h4 mb-2 text-white">Name</label>
+            </div>
+            <input th:field="*{name}" th:value="${bindingModel != null ? bindingModel.name : ''}"
+                   th:errorclass="'is-invalid alert-danger'" type="text" class="form-control" id="name" name="name"/>
+            <small th:if="${#fields.hasErrors('name')}"
+                   th:errors="*{name}" class="text-danger">Name error message</small>
+        </div>
+
+        <div class="form-group">
+            <div class="label-holder text-white textCol d-flex justify-content-center">
+                <label for="description" class="h4 m-2">Description</label>
+            </div>
+            <textarea th:field="*{description}" th:value="${bindingModel != null ? bindingModel.description : ''}"
+                      th:errorclass="'is-invalid alert-danger'" type="text" class="form-control" id="description"
+                      name="description"></textarea>
+            <small th:if="${#fields.hasErrors('description')}"
+                   th:errors="*{description}" class="text-danger">Description error message</small>
+        </div>
+
+        <div class="button-holder d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary mt-3 shadow" value="Add category">Add category</button>
+        </div>
+
+    </form>
+</main>
+<footer th:replace="~{fragments/commons::footer}"></footer>
+</body>
+</html>

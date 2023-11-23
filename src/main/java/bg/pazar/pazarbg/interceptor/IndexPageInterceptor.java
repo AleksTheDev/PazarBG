@@ -1,38 +1,31 @@
 package bg.pazar.pazarbg.interceptor;
 
+import bg.pazar.pazarbg.service.impl.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.util.UrlPathHelper;
 
 @Component
 public class IndexPageInterceptor implements HandlerInterceptor {
+    private final AuthenticationService authenticationService;
     UrlPathHelper urlPathHelper = new UrlPathHelper();
+
+    public IndexPageInterceptor(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        if ( "/".equals(urlPathHelper.getLookupPathForRequest(request)) &&
-        isAuthenticated()){
-
+        String requestPath = urlPathHelper.getLookupPathForRequest(request);
+        if (requestPath.equals("/") && authenticationService.isAuthenticated()) {
             String encodedRedirectURL = response.encodeRedirectURL("/home");
             response.setStatus(HttpServletResponse.SC_FOUND);
             response.setHeader("Location", encodedRedirectURL);
             return false;
-        } else{
+        } else {
             return true;
         }
-    }
-
-    private boolean isAuthenticated() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || AnonymousAuthenticationToken.class.
-                isAssignableFrom(authentication.getClass())) {
-            return false;
-        }
-        return authentication.isAuthenticated();
     }
 }

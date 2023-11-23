@@ -1,7 +1,6 @@
 package bg.pazar.pazarbg.service.impl;
 
 import bg.pazar.pazarbg.model.entity.UserEntity;
-import bg.pazar.pazarbg.model.enums.UserRole;
 import bg.pazar.pazarbg.repo.UserRepository;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             return User
                     .withUsername(userEntity.getUsername())
                     .password(userEntity.getPassword())
-                    .roles(UserRole.ADMIN.name())
+                    .roles(userEntity.getRole().name())
                     .build();
         } else throw new UsernameNotFoundException("User with username " + username + " not found!");
 

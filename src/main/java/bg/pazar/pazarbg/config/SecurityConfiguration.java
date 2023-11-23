@@ -20,7 +20,8 @@ public class SecurityConfiguration {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         // Allow anyone to see the home page, the registration page and the login form
                         .requestMatchers("/").permitAll()
-                        .requestMatchers("/users/login", "/users/register", "/users/login-error").anonymous()
+                        .requestMatchers("/users/login", "/users/register", "/users/login-error").permitAll()
+                        .requestMatchers("/offer/add").permitAll()
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/admin/**").hasRole(UserRole.ADMIN.name())
                         // all other requests are authenticated.
@@ -49,17 +50,8 @@ public class SecurityConfiguration {
         }).build();
     }
 
-    /*
-    @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepository) {
-        // This service translates the mobilele users and roles
-        // to representation which spring security understands.
-        return new MobileleUserDetailsService(userRepository);
-    }
-    */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8();
     }
-
 }

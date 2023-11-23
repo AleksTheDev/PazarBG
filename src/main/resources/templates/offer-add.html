@@ -11,13 +11,15 @@
     <form class="mx-auto w-25 bg-blur rounded-4 form-adaptive"
           th:method="POST"
           th:action="@{/offer/add}"
-          th:object="${addOfferBindingModel}">
+          th:object="${addOfferBindingModel}"
+          enctype="multipart/form-data">
 
         <div class="form-group">
             <div class="label-holder textCol d-flex justify-content-center">
                 <label for="title" class="h4 mb-2 text-white">Title</label>
             </div>
-            <input th:field="*{title}" th:value="${bindingModel != null ? bindingModel.title : ''}" th:errorclass="'is-invalid alert-danger'" type="text" class="form-control" id="title" name="title"/>
+            <input th:field="*{title}" th:value="${bindingModel != null ? bindingModel.title : ''}"
+                   th:errorclass="'is-invalid alert-danger'" type="text" class="form-control" id="title" name="title"/>
             <small th:if="${#fields.hasErrors('title')}"
                    th:errors="*{title}" class="text-danger">Title error message</small>
         </div>
@@ -26,22 +28,50 @@
             <div class="label-holder text-white textCol d-flex justify-content-center">
                 <label for="description" class="h4 m-2">Description</label>
             </div>
-            <textarea th:field="*{description}" th:value="${bindingModel != null ? bindingModel.description : ''}" th:errorclass="'is-invalid alert-danger'" type="text" class="form-control" id="description" name="description"></textarea>
+            <textarea th:field="*{description}" th:value="${bindingModel != null ? bindingModel.description : ''}"
+                      th:errorclass="'is-invalid alert-danger'" type="text" class="form-control" id="description"
+                      name="description"></textarea>
             <small th:if="${#fields.hasErrors('description')}"
-                   th:errors="*{description}" class="text-danger">description error message</small>
+                   th:errors="*{description}" class="text-danger">Description error message</small>
         </div>
 
         <div class="form-group">
             <div class="label-holder text-white textCol d-flex justify-content-center">
-                <label for="price" class="h4 m-2">Price</label>
+                <label for="price" class="h4 m-2">Price in BGN</label>
             </div>
-            <input th:field="*{price}" th:errorclass="'is-invalid alert-danger'" type="number" class="form-control" id="price" name="price"/>
+            <input th:field="*{price}" th:errorclass="'is-invalid alert-danger'" type="number" class="form-control"
+                   id="price" name="price"/>
             <small th:if="${#fields.hasErrors('price')}"
-                   th:errors="*{price}" class="text-danger">price error message</small>
+                   th:errors="*{price}" class="text-danger">Price error message</small>
+        </div>
+
+        <div class="form-group">
+            <div class="label-holder text-white textCol d-flex justify-content-center">
+                <label for="category" class="h4 mb-2">Category</label>
+            </div>
+            <select class="browser-default custom-select" id="category" name="category">
+                <option value="">Select category</option>
+                <option th:each="category : ${categories}" th:value="${category}" th:text="${category}"></option>
+            </select>
+
+            <small th:if="${#fields.hasErrors('category')}"
+                   th:errors="*{category}" class="text-danger">Category error message</small>
+        </div>
+
+        <div class="form-group">
+            <div class="label-holder text-white textCol d-flex justify-content-center">
+                <label for="images" class="h4 m-2">Images</label>
+            </div>
+            <input th:field="*{images}" th:errorclass="'is-invalid alert-danger'" type="file" multiple accept="image/jpeg"
+                   class="form-control" id="images" name="images"/>
+            <small th:if="${#fields.hasErrors('images')}"
+                   th:errors="*{images}" class="text-danger h1">Images error message</small>
+            <small th:if="${errorMessage != null}" th:text="${errorMessage}" class="text-danger">Images error
+                message</small>
         </div>
 
         <div class="button-holder d-flex justify-content-center">
-            <button type="submit" class="btn btn-primary mt-3 shadow" value="Register">Register</button>
+            <button type="submit" class="btn btn-primary mt-3 shadow" value="Add offer">Add offer</button>
         </div>
 
     </form>

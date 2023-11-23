@@ -61,6 +61,13 @@
                         </button>
                     </li>
 
+                    <li class="nav-item p-1" sec:authorize="hasRole('ADMIN')">
+                        <button class="btn btn-primary shadow-sm">
+                            <a class="no-link-underline text-white"
+                               th:href="@{/admin/category-add}">Add category</a>
+                        </button>
+                    </li>
+
                     <li class="nav-item p-1" sec:authorize="isAuthenticated()">
                         <form th:method="post" th:action="@{/users/logout}">
                             <input type="submit" class="btn btn-danger shadow-sm" value="Logout"/>
