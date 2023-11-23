@@ -33,6 +33,10 @@ public class Offer {
     @NotNull
     private Category category;
 
+    @ManyToOne
+    @NotNull
+    private UserEntity createdBy;
+
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     private List<String> imagePaths;
 

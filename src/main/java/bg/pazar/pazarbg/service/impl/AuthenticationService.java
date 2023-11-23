@@ -34,4 +34,11 @@ public class AuthenticationService {
             return user.getId();
         } else return null;
     }
+
+    public String getCurrentUserName() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            return authentication.getName();
+        } else return null;
+    }
 }

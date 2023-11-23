@@ -4,8 +4,25 @@
 <head th:replace="~{fragments/commons::head}"></head>
 <body>
 <header th:replace="~{fragments/commons::nav}"></header>
-<main>
-    <h1>Home</h1>
+<main class="row">
+    <div th:each="offer : ${viewModel.getOffers()}" th:id="${'offer-carousel' + offer.getId()}" class="carousel slide w-25">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img th:src="@{${'/offer/image/' + offer.getId() + '/0'}}" class="d-block w-100" alt="Offer image">
+            </div>
+            <div th:if="${offer.getImagesCount() > 1}" th:each="imageID : ${#numbers.sequence( 1, offer.getImagesCount() - 1)}" class="carousel-item">
+                <img th:src="@{${'/offer/image/' + offer.getId() + '/' + imageID}}" class="d-block w-100" alt="Offer image">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" th:data-bs-target="${'#offer-carousel' + offer.getId()}" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" th:data-bs-target="${'#offer-carousel' + offer.getId()}" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
 </main>
 <footer th:replace="~{fragments/commons::footer}"></footer>
 </body>

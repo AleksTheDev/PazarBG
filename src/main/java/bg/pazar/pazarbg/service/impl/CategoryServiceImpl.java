@@ -2,6 +2,7 @@ package bg.pazar.pazarbg.service.impl;
 
 import bg.pazar.pazarbg.model.dto.category.AddCategoryBindingModel;
 import bg.pazar.pazarbg.model.entity.Category;
+import bg.pazar.pazarbg.model.view.CategoryViewModel;
 import bg.pazar.pazarbg.repo.CategoryRepository;
 import bg.pazar.pazarbg.service.CategoryService;
 import org.modelmapper.ModelMapper;
@@ -35,5 +36,22 @@ public class CategoryServiceImpl implements CategoryService {
         });
 
         return categoryNames;
+    }
+
+    @Override
+    public List<CategoryViewModel> getAllCategoriesViewModels() {
+        List<Category> categories = categoryRepository.findAll();
+        List<CategoryViewModel> models = new ArrayList<>();
+
+        categories.forEach(category -> {
+            models.add(getCategoryViewModel(category));
+        });
+
+        return models;
+    }
+
+    @Override
+    public CategoryViewModel getCategoryViewModel(Category category) {
+        return modelMapper.map(category, CategoryViewModel.class);
     }
 }

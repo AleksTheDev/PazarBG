@@ -10,10 +10,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class UserEntity {
@@ -39,4 +40,10 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @OneToMany
+    private Set<Offer> offers;
+
+    public UserEntity() {
+        this.offers = new HashSet<>();
+    }
 }
