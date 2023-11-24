@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/commons::head}"></head>
+<body>
+<header th:replace="~{fragments/commons::nav}"></header>
+<main>
+    <div class="container bg-blur rounded-4 mt-5 shadow">
+        <h1 th:text="${status + ' - ' + error}"></h1>
+        <hr class="my-3 mx-auto bg-white w-75"/>
+
+        <p th:if="${status == 403}" th:text="${'Request is too big or you are not allowed to access this resource: ' + path}" class="h4"></p>
+        <p th:if="${status == 404}" th:text="${'No such page: ' + path}" class="h4"></p>
+        <p th:if="${status == 500}" th:text="${'There has been an internal server error: ' + path}" class="h4"></p>
+    </div>
+</main>
+<footer th:replace="~{fragments/commons::footer}"></footer>
+</body>
+</html>

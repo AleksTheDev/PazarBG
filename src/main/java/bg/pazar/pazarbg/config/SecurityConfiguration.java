@@ -21,7 +21,6 @@ public class SecurityConfiguration {
                         // Allow anyone to see the home page, the registration page and the login form
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/users/login", "/users/register", "/users/login-error").permitAll()
-                        .requestMatchers("/offer/add").permitAll()
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/admin/**").hasRole(UserRole.ADMIN.name())
                         // all other requests are authenticated.

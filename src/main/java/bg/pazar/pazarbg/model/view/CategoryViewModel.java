@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CategoryViewModel {
+    private Long id;
     private String name;
     private String description;
 }

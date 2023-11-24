@@ -30,10 +30,12 @@ public class Offer {
     private double price;
 
     @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
     @NotNull
     private Category category;
 
     @ManyToOne
+    @JoinColumn(name = "created_by_id", nullable = false)
     @NotNull
     private UserEntity createdBy;
 

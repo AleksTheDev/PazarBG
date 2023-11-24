@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 public class AddOfferBindingModel {
     @NotEmpty(message = "Title cannot be empty")
-    @Size(min = 3, max = 30, message = "Title must be between 3 and 30 characters long")
+    @Size(min = 3, max = 50, message = "Title must be between 3 and 50 characters long")
     private String title;
 
     @NotEmpty(message = "Description cannot be empty")

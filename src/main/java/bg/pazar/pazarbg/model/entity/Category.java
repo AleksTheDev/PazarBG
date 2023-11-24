@@ -24,7 +24,7 @@ public class Category {
     @NotNull
     private String description;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "category")
     private Set<Offer> offers;
 
     public Category() {
