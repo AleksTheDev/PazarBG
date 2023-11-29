@@ -16,5 +16,7 @@ public class OfferViewModel {
     private Double price;
     private String createdBy;
     private String category;
-    private int imagesCount;
+    private Long firstImageId;
+    private List<Long> imagesIds;
+    private boolean isUserOfferCreator;
 }

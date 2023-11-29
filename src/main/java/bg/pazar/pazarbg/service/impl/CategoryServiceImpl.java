@@ -31,9 +31,7 @@ public class CategoryServiceImpl implements CategoryService {
     public List<String> getAllCategoryNames() {
         List<String> categoryNames = new ArrayList<>();
 
-        categoryRepository.findAll().forEach(category -> {
-            categoryNames.add(category.getName());
-        });
+        categoryRepository.findAll().forEach(category -> categoryNames.add(category.getName()));
 
         return categoryNames;
     }
@@ -43,9 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
         List<Category> categories = categoryRepository.findAll();
         List<CategoryViewModel> models = new ArrayList<>();
 
-        categories.forEach(category -> {
-            models.add(getCategoryViewModel(category));
-        });
+        categories.forEach(category -> models.add(getCategoryViewModel(category)));
 
         return models;
     }

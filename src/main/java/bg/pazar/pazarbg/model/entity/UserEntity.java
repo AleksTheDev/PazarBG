@@ -41,7 +41,15 @@ public class UserEntity {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "createdBy")
     private Set<Offer> offers;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "boughtBy")
+    private Set<Offer> boughtOffers;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "uploadedBy")
+    private Set<Image> images;
+
     public UserEntity() {
         this.offers = new HashSet<>();
+        this.boughtOffers = new HashSet<>();
+        this.images = new HashSet<>();
     }
 }

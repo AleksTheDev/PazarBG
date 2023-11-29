@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/commons::head}"></head>
+<body>
+<header th:replace="~{fragments/commons::nav}"></header>
+<main class="p-4">
+    <h1 class="text-center display-5"><span class="badge bg-secondary rounded-4 shadow mb-2">Messages</span></h1>
+    <table class="rounded-corners w-100">
+        <tr>
+            <th class="h3">From:</th>
+            <th class="h3">Offer:</th>
+            <th class="h3">Message:</th>
+        </tr>
+        <tr th:each="message : ${messages}">
+            <td class="h4 normal-font-weight" th:text="${message.getFrom()}"></td>
+            <td class="h4 normal-font-weight" th:text="${message.getOfferTitle()}"></td>
+            <td class="text-break h4 normal-font-weight" th:text="${message.getContent()}"></td>
+        </tr>
+    </table>
+</main>
+<footer th:replace="~{fragments/commons::footer}"></footer>
+</body>
+</html>

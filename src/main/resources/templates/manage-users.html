@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/commons::head}"></head>
+<body>
+<header th:replace="~{fragments/commons::nav}"></header>
+<main class="p-4">
+    <h1 class="text-center display-5"><span class="badge bg-secondary rounded-4 shadow mb-2">Manage users</span></h1>
+    <div class="row">
+        <table th:each="user : ${users}" class="rounded-corners manage-users p-0 m-3">
+            <tr>
+                <th class="h3">Username:</th>
+                <td class="h4 normal-font-weight text-break" th:text="${user.getUsername()}"></td>
+            </tr>
+            <tr>
+                <th class="h3">Email:</th>
+                <td class="h4 normal-font-weight text-break" th:text="${user.getEmail()}"></td>
+            </tr>
+            <tr>
+                <th class="h3">Added offers:</th>
+                <td class="h4 normal-font-weight" th:text="${user.getOffersAdded()}"></td>
+            </tr>
+            <tr>
+                <th class="h3">Bought offers:</th>
+                <td class="h4 normal-font-weight" th:text="${user.getOffersBought()}"></td>
+            </tr>
+            <tr>
+                <th class="h3">Messages sent:</th>
+                <td class="h4 normal-font-weight" th:text="${user.getMessagesSent()}"></td>
+            </tr>
+            <tr>
+                <th class="h3">Role:</th>
+                <td class="h4 normal-font-weight" th:text="${user.isAdmin() ? 'Admin' : 'User'}"></td>
+            </tr>
+            <tr>
+                <th>
+                    <button class="btn btn-danger shadow">Mark user for deletion</button>
+                </th>
+                <td>
+                    <button th:if="${user.isAdmin()}" class="btn btn-primary shadow">
+                        <a th:href="@{/admin/toggle-role/{id}(id=${user.getId()})}" class="no-link-underline text-white">Demote to user</a>
+                    </button>
+                    <button th:unless="${user.isAdmin()}" class="btn btn-primary shadow">
+                        <a th:href="@{/admin/toggle-role/{id}(id=${user.getId()})}" class="no-link-underline text-white">Promote to admin</a>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</main>
+<footer th:replace="~{fragments/commons::footer}"></footer>
+</body>
+</html>

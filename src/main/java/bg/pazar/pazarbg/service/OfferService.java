@@ -11,7 +11,13 @@ import java.util.List;
 public interface OfferService {
     void addOffer(AddOfferBindingModel addOfferBindingModel) throws IOException;
 
+    void buyOffer(Long id);
+
+    void sendMessage(Long offerID, String content);
+
     List<OfferViewModel> getAllOffersViewModels();
+
+    List<OfferViewModel> getBoughtOffersViewModels();
 
     List<OfferViewModel> getAllOffersViewModelsByCategory(Category category);
 

@@ -2,12 +2,15 @@ package bg.pazar.pazarbg.controller;
 
 import bg.pazar.pazarbg.exception.ImageNotFoundException;
 import bg.pazar.pazarbg.model.dto.offer.AddOfferBindingModel;
-import bg.pazar.pazarbg.model.entity.Offer;
+import bg.pazar.pazarbg.model.entity.Image;
+import bg.pazar.pazarbg.model.enums.ImageType;
+import bg.pazar.pazarbg.repo.ImageRepository;
 import bg.pazar.pazarbg.repo.OfferRepository;
 import bg.pazar.pazarbg.service.CategoryService;
 import bg.pazar.pazarbg.service.OfferService;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,9 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -27,12 +28,12 @@ public class OfferController {
     private static final String BINDING_RESULT_PATH = "org.springframework.validation.BindingResult";
     private final CategoryService categoryService;
     private final OfferService offerService;
-    private final OfferRepository offerRepository;
+    private final ImageRepository imageRepository;
 
-    public OfferController(CategoryService categoryService, OfferService offerService, OfferRepository offerRepository) {
+    public OfferController(CategoryService categoryService, OfferService offerService, OfferRepository offerRepository, ImageRepository imageRepository) {
         this.categoryService = categoryService;
         this.offerService = offerService;
-        this.offerRepository = offerRepository;
+        this.imageRepository = imageRepository;
     }
 
     @GetMapping("/add")
@@ -81,15 +82,29 @@ public class OfferController {
         return new ModelAndView("redirect:/home");
     }
 
-    @GetMapping(
-            value = "/image/{offerid}/{imageid}",
-            produces = MediaType.IMAGE_JPEG_VALUE
-    )
-    public @ResponseBody byte[] getImageWithID(@PathVariable("offerid") Long offerID, @PathVariable("imageid") int imageID) throws IOException {
+    @GetMapping("/buy/{id}")
+    public String buy(@PathVariable("id") Long id) {
+        offerService.buyOffer(id);
+        return "redirect:/home";
+    }
+
+    @PostMapping("/message/{id}")
+    public String message(@PathVariable("id") Long id, String message) {
+        offerService.sendMessage(id, message);
+        return "redirect:/home";
+    }
+
+    @GetMapping(value = "/image/{id}")
+    public ResponseEntity<byte[]> getImageWithID(@PathVariable("id") Long id) {
         try {
-            Offer offer = offerRepository.findById(offerID).orElseThrow();
-            String imagePath = offer.getImagePaths().get(imageID);
-            return Files.readAllBytes(Path.of(imagePath));
+            Image image = imageRepository.findById(id).orElseThrow();
+            byte[] bytes = Files.readAllBytes(Path.of(image.getPath()));
+
+            if(image.getType().name().equals(ImageType.PNG.name())) {
+                return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(bytes);
+            } else {
+                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
+            }
         } catch (Exception e) {
             throw new ImageNotFoundException();
         }

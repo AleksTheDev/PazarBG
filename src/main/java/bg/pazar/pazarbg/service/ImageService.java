@@ -1,11 +1,12 @@
 package bg.pazar.pazarbg.service;
 
+import bg.pazar.pazarbg.model.entity.Offer;
+import bg.pazar.pazarbg.model.entity.UserEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
 
 public interface ImageService {
-
-    List<String> saveImages(List<MultipartFile> images, Long id) throws IOException, IllegalArgumentException;
+    void saveImages(List<MultipartFile> images, Offer offer, UserEntity user) throws IOException, IllegalArgumentException;
 }

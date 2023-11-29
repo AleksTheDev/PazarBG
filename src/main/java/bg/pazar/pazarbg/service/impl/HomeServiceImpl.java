@@ -34,6 +34,17 @@ public class HomeServiceImpl implements HomeService {
     }
 
     @Override
+    public HomeViewModel getBoughtOffers() {
+        HomeViewModel model = new HomeViewModel();
+
+        model.setCurrentCategory(null);
+        model.setCategories(null);
+        model.setOffers(offerService.getBoughtOffersViewModels());
+
+        return model;
+    }
+
+    @Override
     public HomeViewModel getOffersByCategory(Long id) {
         Category category = categoryRepository.findById(id).orElse(null);
         if (category == null) throw new CategoryNotFoundException();

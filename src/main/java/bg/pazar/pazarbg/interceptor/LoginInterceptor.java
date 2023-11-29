@@ -8,7 +8,7 @@ import org.springframework.web.util.UrlPathHelper;
 
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
-    UrlPathHelper urlPathHelper = new UrlPathHelper();
+    final UrlPathHelper urlPathHelper = new UrlPathHelper();
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {

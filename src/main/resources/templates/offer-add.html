@@ -62,7 +62,7 @@
             <div class="label-holder text-white textCol d-flex justify-content-center">
                 <label for="images" class="h4 m-2">Images</label>
             </div>
-            <input th:field="*{images}" th:errorclass="'is-invalid alert-danger'" type="file" multiple accept="image/jpeg"
+            <input th:field="*{images}" th:errorclass="'is-invalid alert-danger'" type="file" multiple accept="image/jpeg, image/png"
                    class="form-control" id="images" name="images"/>
             <small th:if="${#fields.hasErrors('images')}"
                    th:errors="*{images}" class="text-danger h1">Images error message</small>

@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -39,10 +39,14 @@ public class Offer {
     @NotNull
     private UserEntity createdBy;
 
-    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-    private List<String> imagePaths;
+    @ManyToOne
+    @JoinColumn(name = "bought_by_id")
+    private UserEntity boughtBy;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "offer")
+    private Set<Image> images;
 
     public Offer() {
-        this.imagePaths = new ArrayList<>();
+        this.images = new HashSet<>();
     }
 }

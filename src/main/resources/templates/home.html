@@ -6,44 +6,56 @@
 <header th:replace="~{fragments/commons::nav}"></header>
 <main class="p-4">
 
-    <h1 class="text-center display-5"><span class="badge bg-secondary rounded-4 shadow">Categories</span></h1>
-    <div class="categories row justify-content-center mt-3">
-        <button th:each="category : ${viewModel.getCategories()}" th:class="${'category-btn btn m-2 px-3 py-2 rounded-4 shadow-sm' + (viewModel.getCurrentCategory() != null ? (viewModel.getCurrentCategory().getName().equals(category.getName()) ? ' btn-info' : ' btn-primary') : ' btn-primary')}">
-            <a th:text="${category.getName()}" th:href="@{/home/category/{id}(id=${category.getId()})}" class="no-link-underline text-white h3"></a>
-        </button>
+    <div th:unless="${boughtOffersMode != null}">
+        <h1 class="text-center display-5"><span class="badge bg-secondary rounded-4 shadow">Categories</span></h1>
+        <div class="categories row justify-content-center mt-3">
+            <button th:each="category : ${viewModel.getCategories()}"
+                    th:class="${'category-btn btn m-2 px-3 py-2 rounded-4 shadow-sm' + (viewModel.getCurrentCategory() != null ? (viewModel.getCurrentCategory().getName().equals(category.getName()) ? ' btn-info' : ' btn-primary') : ' btn-primary')}">
+                <a th:text="${category.getName()}" th:href="@{/home/category/{id}(id=${category.getId()})}"
+                   class="no-link-underline text-white h3"></a>
+            </button>
+        </div>
+
+        <hr/>
     </div>
 
-    <hr/>
-
-    <h1 class="text-center display-5"><span class="badge bg-secondary rounded-4 shadow" th:text="${viewModel.getCurrentCategory() == null ? 'All offers' : viewModel.getCurrentCategory().getName()}">Offers</span></h1>
+    <h1 class="text-center display-5"><span class="badge bg-secondary rounded-4 shadow"
+                                            th:text="${boughtOffersMode != null ? 'Bought offers' : (viewModel.getCurrentCategory() == null ? 'All offers' : viewModel.getCurrentCategory().getName())}">Offers</span>
+    </h1>
 
     <div class="offers row justify-content-center">
         <div th:each="offer : ${viewModel.getOffers()}" class="offer m-1 p-1 rounded-4">
             <div th:id="${'offer-carousel' + offer.getId()}"
                  class="carousel slide container-400 offer-image-container rounded-4">
 
-                <div th:if="${offer.getImagesCount() > 1}" class="carousel-indicators">
-                    <button type="button" th:data-bs-target="${'#offer-carousel' + offer.getId()}" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                    <button th:each="imageID : ${#numbers.sequence( 1, offer.getImagesCount() - 1)}" type="button" th:data-bs-target="${'#offer-carousel' + offer.getId()}" th:data-bs-slide-to="${imageID}" th:aria-label="${'Slide ' + (imageID + 1)}"></button>
+                <div th:if="${offer.getImagesIds().size() > 0}" class="carousel-indicators">
+                    <button type="button" th:data-bs-target="${'#offer-carousel' + offer.getId()}" data-bs-slide-to="0"
+                            class="active" aria-current="true" aria-label="Slide 1"></button>
+                    <button th:each="imageIndex : ${#numbers.sequence( 0, offer.getImagesIds().size() - 1)}" type="button"
+                            th:data-bs-target="${'#offer-carousel' + offer.getId()}" th:data-bs-slide-to="${imageIndex + 1}"
+                            th:aria-label="${'Slide ' + (imageIndex + 2)}"></button>
                 </div>
 
                 <div class="carousel-inner h-100 d-flex align-items-center">
                     <div class="carousel-item active offer-carousel">
-                        <img th:src="@{${'/offer/image/' + offer.getId() + '/0'}}" class="d-block offer-image mx-auto"
-                             alt="Offer image">
+                        <img th:src="@{${'/offer/image/' + offer.getFirstImageId()}}"
+                             class="d-block offer-image mx-auto"
+                             alt="Offer first image">
                     </div>
-                    <div th:if="${offer.getImagesCount() > 1}"
-                         th:each="imageID : ${#numbers.sequence( 1, offer.getImagesCount() - 1)}" class="carousel-item offer-carousel">
-                        <img th:src="@{${'/offer/image/' + offer.getId() + '/' + imageID}}" class="d-block offer-image mx-auto"
+                    <div th:if="${offer.getImagesIds().size() > 0}"
+                         th:each="imageID : ${offer.getImagesIds()}" class="carousel-item offer-carousel">
+                        <img th:src="@{${'/offer/image/' + imageID}}" class="d-block offer-image mx-auto"
                              alt="Offer image">
                     </div>
                 </div>
-                <button th:if="${offer.getImagesCount() > 1}" class="carousel-control-prev" type="button" th:data-bs-target="${'#offer-carousel' + offer.getId()}"
+                <button th:if="${offer.getImagesIds().size() > 0}" class="carousel-control-prev" type="button"
+                        th:data-bs-target="${'#offer-carousel' + offer.getId()}"
                         data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
                 </button>
-                <button th:if="${offer.getImagesCount() > 1}" class="carousel-control-next" type="button" th:data-bs-target="${'#offer-carousel' + offer.getId()}"
+                <button th:if="${offer.getImagesIds().size() > 0}" class="carousel-control-next" type="button"
+                        th:data-bs-target="${'#offer-carousel' + offer.getId()}"
                         data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
@@ -52,10 +64,37 @@
 
             <div class="row justify-content-center align-items-end my-2">
                 <h2 class="mx-2 my-0 text-fit-content text-break" th:text="${offer.title}"></h2>
-                <h2 class="m-0 mt-1 text-fit-content normal-font-weight"><span class="badge bg-info rounded-4 shadow" th:text="${offer.price + ' BGN'}">Price</span></h2>
+                <h2 class="m-0 mt-1 text-fit-content normal-font-weight"><span class="badge bg-info rounded-4 shadow"
+                                                                               th:text="${offer.price + ' BGN'}">Price</span>
+                </h2>
             </div>
             <hr class="m-2 border border-1 border-dark opacity-75"/>
-            <h4 class="normal-font-weight text-break p-2" th:text="${offer.description}"></h4>
+            <h4 class="p-1 mx-1 my-0">Description:</h4>
+            <h4 class="normal-font-weight text-break px-2 py-1" th:text="${offer.description}"></h4>
+            <hr class="m-2 mb-3 border border-1 border-dark opacity-75"/>
+            <div class="w-100 d-flex justify-content-center align-items-center mb-1">
+                <button th:unless="${offer.isUserOfferCreator() || boughtOffersMode != null}" class="btn btn-primary shadow mx-2">
+                    <a th:href="@{/offer/buy/{id}(id=${offer.getId()})}" class="no-link-underline text-white h4">Buy
+                        offer</a>
+                </button>
+                <h4 class="p-1 mx-1 my-0" th:text="${'Category: ' + offer.getCategory()}"></h4>
+            </div>
+            <div th:unless="${boughtOffersMode != null || offer.isUserOfferCreator()}">
+                <hr class="mx-2 mb-2 border border-1 border-dark opacity-75"/>
+                <h4 class="mx-2 my-0">Send message to seller:</h4>
+                <h4 class="p-0 mx-2 my-0 normal-font-weight text-break">Minimum 20 characters, maximum 200
+                    characters</h4>
+                <form
+                        th:action="@{/offer/message/{id}(id=${offer.getId()})}"
+                        th:method="POST" class="d-flex justify-content-center mx-2 my-2">
+
+                    <textarea class="form-control" id="message" name="message"></textarea>
+
+                    <div class="button-holder d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-primary m-3 shadow">Message seller</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </main>

@@ -2,6 +2,10 @@
     width: 15%;
 }
 
+.w-95 {
+    width: 95%;
+}
+
 .bg-gray {
     background-color: #e9ecef;
 }
@@ -148,6 +152,59 @@ main {
 @media (min-width: 1300px) {
     .form-adaptive {
         width: 25%!important;
+    }
+}
+
+table.rounded-corners {
+    /* Change these properties */
+    --border: 2px solid black;
+    border-radius: 10px;
+
+    /* Don't change these properties */
+    border-spacing: 0;
+    border-collapse: separate;
+    border: var(--border);
+    overflow: hidden;
+}
+
+table.rounded-corners th {
+    background-color: rgba(138, 138, 138, 0.5);
+    padding: 7px;
+}
+
+table.rounded-corners td {
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 7px;
+}
+
+/* Apply a border to the right of all but the last column */
+table.rounded-corners th:not(:last-child),
+table.rounded-corners td:not(:last-child) {
+    border-right: var(--border);
+}
+
+/* Apply a border to the bottom of all but the last row */
+table.rounded-corners>thead>tr:not(:last-child)>th,
+table.rounded-corners>thead>tr:not(:last-child)>td,
+table.rounded-corners>tbody>tr:not(:last-child)>th,
+table.rounded-corners>tbody>tr:not(:last-child)>td,
+table.rounded-corners>tfoot>tr:not(:last-child)>th,
+table.rounded-corners>tfoot>tr:not(:last-child)>td,
+table.rounded-corners>tr:not(:last-child)>td,
+table.rounded-corners>tr:not(:last-child)>th,
+table.rounded-corners>thead:not(:last-child),
+table.rounded-corners>tbody:not(:last-child),
+table.rounded-corners>tfoot:not(:last-child) {
+    border-bottom: var(--border);
+}
+
+.manage-users {
+    width: 500px;
+}
+
+@media (max-width: 550px) {
+    .manage-users {
+        width: 90vw;
     }
 }
 

@@ -2,14 +2,12 @@ package bg.pazar.pazarbg.controller;
 
 import bg.pazar.pazarbg.model.dto.category.AddCategoryBindingModel;
 import bg.pazar.pazarbg.service.CategoryService;
+import bg.pazar.pazarbg.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -19,9 +17,11 @@ public class AdminController {
     private static final String BINDING_RESULT_PATH = "org.springframework.validation.BindingResult";
 
     private final CategoryService categoryService;
+    private final UserService userService;
 
-    public AdminController(CategoryService categoryService) {
+    public AdminController(CategoryService categoryService, UserService userService) {
         this.categoryService = categoryService;
+        this.userService = userService;
     }
 
     @GetMapping("/category-add")
@@ -48,5 +48,21 @@ public class AdminController {
         categoryService.addCategory(addCategoryBindingModel);
 
         return new ModelAndView("redirect:/home");
+    }
+
+    @GetMapping("/manage-users")
+    public ModelAndView manageUsers() {
+        ModelAndView modelAndView = new ModelAndView("manage-users");
+
+        modelAndView.addObject("users", userService.getAllUsersViewModels());
+
+        return modelAndView;
+    }
+
+    @GetMapping("/toggle-role/{id}")
+    public String toggleRole(@PathVariable Long id) {
+        userService.toggleRole(id);
+
+        return "redirect:/admin/manage-users";
     }
 }

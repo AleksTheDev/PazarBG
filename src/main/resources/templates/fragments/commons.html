@@ -54,6 +54,20 @@
                         </span>
                     </li>
 
+                    <li class="nav-item p-1" sec:authorize="hasRole('ADMIN')">
+                        <button class="btn btn-success shadow-sm">
+                            <a class="no-link-underline text-white"
+                               th:href="@{/admin/category-add}">Add category</a>
+                        </button>
+                    </li>
+
+                    <li class="nav-item p-1" sec:authorize="hasRole('ADMIN')">
+                        <button class="btn btn-success shadow-sm">
+                            <a class="no-link-underline text-white"
+                               th:href="@{/admin/manage-users}">Manage users</a>
+                        </button>
+                    </li>
+
                     <li class="nav-item p-1" sec:authorize="isAuthenticated()">
                         <button class="btn btn-primary shadow-sm">
                             <a class="no-link-underline text-white"
@@ -61,10 +75,17 @@
                         </button>
                     </li>
 
-                    <li class="nav-item p-1" sec:authorize="hasRole('ADMIN')">
+                    <li class="nav-item p-1" sec:authorize="isAuthenticated()">
                         <button class="btn btn-primary shadow-sm">
                             <a class="no-link-underline text-white"
-                               th:href="@{/admin/category-add}">Add category</a>
+                               th:href="@{/home/bought}">Bought offers</a>
+                        </button>
+                    </li>
+
+                    <li class="nav-item p-1" sec:authorize="isAuthenticated()">
+                        <button class="btn btn-primary shadow-sm">
+                            <a class="no-link-underline text-white"
+                               th:href="@{/home/messages}">Messages</a>
                         </button>
                     </li>
 

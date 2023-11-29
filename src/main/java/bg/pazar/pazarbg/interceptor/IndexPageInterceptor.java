@@ -10,7 +10,7 @@ import org.springframework.web.util.UrlPathHelper;
 @Component
 public class IndexPageInterceptor implements HandlerInterceptor {
     private final AuthenticationService authenticationService;
-    UrlPathHelper urlPathHelper = new UrlPathHelper();
+    final UrlPathHelper urlPathHelper = new UrlPathHelper();
 
     public IndexPageInterceptor(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
