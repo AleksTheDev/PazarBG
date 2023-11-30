@@ -65,4 +65,11 @@ public class AdminController {
 
         return "redirect:/admin/manage-users";
     }
+
+    @GetMapping("/toggle-deletion/{id}")
+    public String toggleDeletion(@PathVariable Long id) {
+        userService.toggleDeletion(id);
+
+        return "redirect:/admin/manage-users";
+    }
 }

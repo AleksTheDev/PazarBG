@@ -33,8 +33,17 @@
                 <td class="h4 normal-font-weight" th:text="${user.isAdmin() ? 'Admin' : 'User'}"></td>
             </tr>
             <tr>
+                <th class="h3">Marked for deletion?:</th>
+                <td class="h4 normal-font-weight" th:text="${user.isMarkedForDeletion() ? 'Yes' : 'No'}"></td>
+            </tr>
+            <tr>
                 <th>
-                    <button class="btn btn-danger shadow">Mark user for deletion</button>
+                    <button th:if="${user.isMarkedForDeletion()}" class="btn btn-danger shadow">
+                        <a th:href="@{/admin/toggle-deletion/{id}(id=${user.getId()})}" class="no-link-underline text-white">Cancel user deletion</a>
+                    </button>
+                    <button th:unless="${user.isMarkedForDeletion()}" class="btn btn-danger shadow">
+                        <a th:href="@{/admin/toggle-deletion/{id}(id=${user.getId()})}" class="no-link-underline text-white">Mark user for deletion</a>
+                    </button>
                 </th>
                 <td>
                     <button th:if="${user.isAdmin()}" class="btn btn-primary shadow">

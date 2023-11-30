@@ -48,6 +48,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userRegisterBindingModel.getEmail());
         user.setPassword(passwordEncoder.encode(userRegisterBindingModel.getPassword()));
         user.setRole(UserRole.USER);
+        user.setMarkedForDeletion(false);
 
         userRepository.save(user);
 
@@ -61,6 +62,16 @@ public class UserServiceImpl implements UserService {
 
         if(user.getRole().name().equals(UserRole.USER.name())) user.setRole(UserRole.ADMIN);
         else user.setRole(UserRole.USER);
+
+        userRepository.save(user);
+    }
+
+    @Override
+    public void toggleDeletion(Long id) {
+        UserEntity user = userRepository.findById(id).orElse(null);
+        if(user == null) throw new UserNotFoundException();
+
+        user.setMarkedForDeletion(!user.isMarkedForDeletion());
 
         userRepository.save(user);
     }
@@ -86,6 +97,7 @@ public class UserServiceImpl implements UserService {
         model.setOffersBought(user.getBoughtOffers().size());
         model.setMessagesSent(messageRepository.findAllByFromId(user.getId()).size());
         model.setAdmin(user.getRole().name().equals(UserRole.ADMIN.name()));
+        model.setMarkedForDeletion(user.isMarkedForDeletion());
 
         return model;
     }

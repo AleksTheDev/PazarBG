@@ -12,6 +12,8 @@ public interface UserService {
 
     void toggleRole(Long id);
 
+    void toggleDeletion(Long id);
+
     List<UserViewModel> getAllUsersViewModels();
 
     UserViewModel getUserViewModel(UserEntity user);

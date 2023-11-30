@@ -38,6 +38,8 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    private boolean markedForDeletion;
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "createdBy")
     private Set<Offer> offers;
 
@@ -47,9 +49,13 @@ public class UserEntity {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "uploadedBy")
     private Set<Image> images;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "from")
+    private Set<Message> sentMessages;
+
     public UserEntity() {
         this.offers = new HashSet<>();
         this.boughtOffers = new HashSet<>();
         this.images = new HashSet<>();
+        this.sentMessages = new HashSet<>();
     }
 }

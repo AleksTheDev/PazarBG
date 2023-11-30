@@ -20,8 +20,6 @@ import java.util.Set;
 
 @Service
 public class OfferServiceImpl implements OfferService {
-
-
     private final ImageService imageService;
     private final OfferRepository offerRepository;
     private final CategoryRepository categoryRepository;

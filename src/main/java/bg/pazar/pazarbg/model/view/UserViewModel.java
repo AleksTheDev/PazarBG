@@ -15,4 +15,5 @@ public class UserViewModel {
     private int offersBought;
     private int messagesSent;
     private boolean isAdmin;
+    private boolean markedForDeletion;
 }
