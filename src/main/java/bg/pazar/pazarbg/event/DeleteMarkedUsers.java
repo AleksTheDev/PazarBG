@@ -11,7 +11,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

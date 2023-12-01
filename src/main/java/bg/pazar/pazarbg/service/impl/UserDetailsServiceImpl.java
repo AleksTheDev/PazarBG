@@ -26,6 +26,5 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                     .roles(userEntity.getRole().name())
                     .build();
         } else throw new UsernameNotFoundException("User with username " + username + " not found!");
-
     }
 }

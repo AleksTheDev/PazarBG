@@ -39,7 +39,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public void addOffer(AddOfferBindingModel addOfferBindingModel) throws IOException {
+    public Offer addOffer(AddOfferBindingModel addOfferBindingModel) throws IOException {
         Offer offer = modelMapper.map(addOfferBindingModel, Offer.class);
 
         offer.setCategory(categoryRepository.findByName(addOfferBindingModel.getCategory()));
@@ -53,17 +53,19 @@ public class OfferServiceImpl implements OfferService {
         imageService.saveImages(addOfferBindingModel.getImages(), offer, user);
 
         offerRepository.save(offer);
+
+        return offer;
     }
 
     @Override
-    public void buyOffer(Long id) {
+    public Offer buyOffer(Long id) {
         Offer offer = offerRepository.findById(id).orElse(null);
         if(offer == null) throw new OfferNotFoundException();
         if(offer.getBoughtBy() != null) throw new OfferNotFoundException();
 
         UserEntity buyer = userRepository.findByUsername(authenticationService.getCurrentUserName());
 
-        if(offer.getCreatedBy().getUsername().equals(buyer.getUsername())) return;
+        if(offer.getCreatedBy().getUsername().equals(buyer.getUsername())) return null;
 
         offer.setBoughtBy(buyer);
 
@@ -73,11 +75,13 @@ public class OfferServiceImpl implements OfferService {
 
         offerRepository.save(offer);
         userRepository.save(buyer);
+
+        return offer;
     }
 
     @Override
-    public void sendMessage(Long offerID, String content) {
-        if(content.length() < 20 || content.length() > 200) return;
+    public Message sendMessage(Long offerID, String content) {
+        if(content.length() < 20 || content.length() > 200) return null;
 
         Offer offer = offerRepository.findById(offerID).orElse(null);
         if(offer == null) throw new OfferNotFoundException();
@@ -85,7 +89,7 @@ public class OfferServiceImpl implements OfferService {
         UserEntity from = userRepository.findByUsername(authenticationService.getCurrentUserName());
         UserEntity to = offer.getCreatedBy();
 
-        if(from.getUsername().equals(to.getUsername())) return;
+        if(from.getUsername().equals(to.getUsername())) return null;
 
         Message message = new Message();
 
@@ -95,6 +99,8 @@ public class OfferServiceImpl implements OfferService {
         message.setContent(content);
 
         messageRepository.save(message);
+
+        return message;
     }
 
     @Override
