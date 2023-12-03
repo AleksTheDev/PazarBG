@@ -16,6 +16,8 @@ public interface OfferService {
 
     Message sendMessage(Long offerID, String content);
 
+    Message replyToMessage(Long offerID, String content);
+
     List<OfferViewModel> getAllOffersViewModels();
 
     List<OfferViewModel> getBoughtOffersViewModels();

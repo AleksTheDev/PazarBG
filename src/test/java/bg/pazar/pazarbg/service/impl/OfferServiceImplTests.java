@@ -142,7 +142,7 @@ public class OfferServiceImplTests {
 
     @Test
     void sendMessageTest() {
-        when(mockOfferRepository.findById(1L)).thenReturn(Optional.ofNullable(testOffer));
+        when(mockOfferRepository.findById(testOffer.getId())).thenReturn(Optional.ofNullable(testOffer));
         when(mockUserRepository.findByUsername(mockAuthenticationService.getCurrentUserName())).thenReturn(testUser2);
 
         Message actual = offerService.sendMessage(1L, testMessage.getContent());
@@ -151,8 +151,22 @@ public class OfferServiceImplTests {
         Assertions.assertEquals(testMessage.getFrom(), actual.getFrom(), "Message senders don't match");
         Assertions.assertEquals(testMessage.getTo(), actual.getTo(), "Message receivers don't match");
         Assertions.assertEquals(testMessage.getOffer(), actual.getOffer(), "Message offers don't match");
+        Assertions.assertFalse(actual.isReply(), "Message should not be marked as a reply");
     }
 
+    @Test
+    void replyToMessageTest() {
+        when(mockMessageRepository.findById(testMessage.getId())).thenReturn(Optional.ofNullable(testMessage));
+        when(mockUserRepository.findByUsername(mockAuthenticationService.getCurrentUserName())).thenReturn(testUser);
+
+        Message actual = offerService.replyToMessage(1L, testMessage.getContent());
+
+        Assertions.assertEquals(testMessage.getContent(), actual.getContent(), "Message contents don't match");
+        Assertions.assertEquals(testMessage.getTo(), actual.getFrom(), "Message senders don't match");
+        Assertions.assertEquals(testMessage.getFrom(), actual.getTo(), "Message receivers don't match");
+        Assertions.assertEquals(testMessage.getOffer(), actual.getOffer(), "Message offers don't match");
+        Assertions.assertTrue(actual.isReply(), "Message should be marked as a reply");
+    }
     @Test
     void generateViewModelForOfferTest() {
         OfferViewModel actual = offerService.generateViewModelForOffer(testOffer);

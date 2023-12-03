@@ -5,7 +5,6 @@ import bg.pazar.pazarbg.model.dto.offer.AddOfferBindingModel;
 import bg.pazar.pazarbg.model.entity.Image;
 import bg.pazar.pazarbg.model.enums.ImageType;
 import bg.pazar.pazarbg.repo.ImageRepository;
-import bg.pazar.pazarbg.repo.OfferRepository;
 import bg.pazar.pazarbg.service.CategoryService;
 import bg.pazar.pazarbg.service.OfferService;
 import jakarta.validation.Valid;
@@ -30,7 +29,7 @@ public class OfferController {
     private final OfferService offerService;
     private final ImageRepository imageRepository;
 
-    public OfferController(CategoryService categoryService, OfferService offerService, OfferRepository offerRepository, ImageRepository imageRepository) {
+    public OfferController(CategoryService categoryService, OfferService offerService, ImageRepository imageRepository) {
         this.categoryService = categoryService;
         this.offerService = offerService;
         this.imageRepository = imageRepository;
@@ -94,13 +93,19 @@ public class OfferController {
         return "redirect:/home";
     }
 
+    @PostMapping("/reply/{id}")
+    public String reply(@PathVariable("id") Long id, String message) {
+        offerService.replyToMessage(id, message);
+        return "redirect:/home/messages";
+    }
+
     @GetMapping(value = "/image/{id}")
     public ResponseEntity<byte[]> getImageWithID(@PathVariable("id") Long id) {
         try {
             Image image = imageRepository.findById(id).orElseThrow();
             byte[] bytes = Files.readAllBytes(Path.of(image.getPath()));
 
-            if(image.getType().name().equals(ImageType.PNG.name())) {
+            if (image.getType().name().equals(ImageType.PNG.name())) {
                 return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(bytes);
             } else {
                 return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);

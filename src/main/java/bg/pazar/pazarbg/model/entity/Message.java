@@ -27,4 +27,6 @@ public class Message {
     private Offer offer;
 
     private String content;
+
+    private boolean isReply;
 }

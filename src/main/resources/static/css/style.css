@@ -75,7 +75,7 @@ main {
     left: 0;
 }
 
-.text-fit-content {
+.width-fit-content {
     width: fit-content;
 }
 
@@ -198,12 +198,12 @@ table.rounded-corners>tfoot:not(:last-child) {
     border-bottom: var(--border);
 }
 
-.manage-users {
+.offer-style-table {
     width: 500px;
 }
 
 @media (max-width: 550px) {
-    .manage-users {
+    .offer-style-table {
         width: 90vw;
     }
 }

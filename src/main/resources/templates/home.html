@@ -23,6 +23,8 @@
                                             th:text="${boughtOffersMode != null ? 'Bought offers' : (viewModel.getCurrentCategory() == null ? 'All offers' : viewModel.getCurrentCategory().getName())}">Offers</span>
     </h1>
 
+    <h3 class="text-center" th:if="${viewModel.getCurrentCategory() != null}"><span class="badge bg-secondary rounded-4 shadow-sm normal-font-weight" th:text="${viewModel.getCurrentCategory().getDescription()}"></span></h3>
+
     <div class="offers row justify-content-center">
         <div th:each="offer : ${viewModel.getOffers()}" class="offer m-1 p-1 rounded-4">
             <div th:id="${'offer-carousel' + offer.getId()}"
@@ -63,9 +65,9 @@
             </div>
 
             <div class="row justify-content-center align-items-end my-2">
-                <h2 class="mx-2 my-0 text-fit-content text-break" th:text="${offer.title}"></h2>
-                <h2 class="m-0 mt-1 text-fit-content normal-font-weight"><span class="badge bg-info rounded-4 shadow"
-                                                                               th:text="${offer.price + ' BGN'}">Price</span>
+                <h2 class="mx-2 my-0 width-fit-content text-break" th:text="${offer.title}"></h2>
+                <h2 class="m-0 mt-1 width-fit-content normal-font-weight"><span class="badge bg-info rounded-4 shadow"
+                                                                                th:text="${offer.price + ' BGN'}">Price</span>
                 </h2>
             </div>
             <hr class="m-2 border border-1 border-dark opacity-75"/>
@@ -82,7 +84,7 @@
             <div th:unless="${boughtOffersMode != null || offer.isUserOfferCreator()}">
                 <hr class="mx-2 mb-2 border border-1 border-dark opacity-75"/>
                 <h4 class="mx-2 my-0">Send message to seller:</h4>
-                <h4 class="p-0 mx-2 my-0 normal-font-weight text-break">Minimum 20 characters, maximum 200
+                <h4 class="p-0 mx-2 my-0 normal-font-weight text-break">Minimum 10 characters, maximum 200
                     characters</h4>
                 <form
                         th:action="@{/offer/message/{id}(id=${offer.getId()})}"

@@ -8,7 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MessageViewModel {
+    private Long id;
     private String from;
     private String offerTitle;
     private String content;
+    private boolean isReply;
 }

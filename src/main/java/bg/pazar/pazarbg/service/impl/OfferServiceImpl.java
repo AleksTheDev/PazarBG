@@ -1,5 +1,6 @@
 package bg.pazar.pazarbg.service.impl;
 
+import bg.pazar.pazarbg.exception.MessageNotFoundException;
 import bg.pazar.pazarbg.exception.OfferNotFoundException;
 import bg.pazar.pazarbg.model.dto.offer.AddOfferBindingModel;
 import bg.pazar.pazarbg.model.entity.*;
@@ -81,7 +82,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public Message sendMessage(Long offerID, String content) {
-        if(content.length() < 20 || content.length() > 200) return null;
+        if(content.length() < 10 || content.length() > 200) return null;
 
         Offer offer = offerRepository.findById(offerID).orElse(null);
         if(offer == null) throw new OfferNotFoundException();
@@ -97,6 +98,33 @@ public class OfferServiceImpl implements OfferService {
         message.setTo(to);
         message.setOffer(offer);
         message.setContent(content);
+        message.setReply(false);
+
+        messageRepository.save(message);
+
+        return message;
+    }
+
+    @Override
+    public Message replyToMessage(Long messageID, String content) {
+        if(content.length() < 10 || content.length() > 200) return null;
+
+        Message originalMessage = messageRepository.findById(messageID).orElse(null);
+        if(originalMessage == null) throw new MessageNotFoundException();
+        if(originalMessage.isReply()) throw new MessageNotFoundException();
+
+        UserEntity from = userRepository.findByUsername(authenticationService.getCurrentUserName());
+        UserEntity to = originalMessage.getFrom();
+
+        if(from.getUsername().equals(to.getUsername())) return null;
+
+        Message message = new Message();
+
+        message.setFrom(from);
+        message.setTo(to);
+        message.setOffer(originalMessage.getOffer());
+        message.setContent(content);
+        message.setReply(true);
 
         messageRepository.save(message);
 
