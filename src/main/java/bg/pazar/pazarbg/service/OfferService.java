@@ -2,7 +2,6 @@ package bg.pazar.pazarbg.service;
 
 import bg.pazar.pazarbg.model.dto.offer.AddOfferBindingModel;
 import bg.pazar.pazarbg.model.entity.Category;
-import bg.pazar.pazarbg.model.entity.Message;
 import bg.pazar.pazarbg.model.entity.Offer;
 import bg.pazar.pazarbg.model.view.OfferViewModel;
 
@@ -13,10 +12,6 @@ public interface OfferService {
     Offer addOffer(AddOfferBindingModel addOfferBindingModel) throws IOException;
 
     Offer buyOffer(Long id);
-
-    Message sendMessage(Long offerID, String content);
-
-    Message replyToMessage(Long offerID, String content);
 
     List<OfferViewModel> getAllOffersViewModels();
 

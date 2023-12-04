@@ -24,8 +24,10 @@ public class AdminController {
         this.userService = userService;
     }
 
+    // Get mapping for adding categories
     @GetMapping("/category-add")
     public String getAddCategory(Model model) {
+        //Add binding model
         if (!model.containsAttribute("addCategoryBindingModel")) {
             model.addAttribute("addCategoryBindingModel", new AddCategoryBindingModel());
         }
@@ -33,23 +35,29 @@ public class AdminController {
         return "category-add";
     }
 
+    //Post mapping for adding categories
     @PostMapping("/category-add")
     public ModelAndView postAddCategory(@Valid @ModelAttribute("addCategoryBindingModel") AddCategoryBindingModel addCategoryBindingModel, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        //Validation
         if (bindingResult.hasErrors()) {
+            //Return entered data to fields
             ModelAndView modelAndView = new ModelAndView("category-add");
             modelAndView.addObject("bindingModel", addCategoryBindingModel);
 
+            //Add error attributes
             redirectAttributes.addFlashAttribute("addCategoryBindingModel", addCategoryBindingModel);
             redirectAttributes.addFlashAttribute(BINDING_RESULT_PATH, bindingResult);
 
             return modelAndView;
         }
 
+        //Add category
         categoryService.addCategory(addCategoryBindingModel);
 
         return new ModelAndView("redirect:/home");
     }
 
+    //Get mapping for manage users page
     @GetMapping("/manage-users")
     public ModelAndView manageUsers() {
         ModelAndView modelAndView = new ModelAndView("manage-users");
@@ -59,6 +67,7 @@ public class AdminController {
         return modelAndView;
     }
 
+    //Get mapping for toggling user role
     @GetMapping("/toggle-role/{id}")
     public String toggleRole(@PathVariable Long id) {
         userService.toggleRole(id);
@@ -66,6 +75,7 @@ public class AdminController {
         return "redirect:/admin/manage-users";
     }
 
+    //Get mapping for toggling user deletion
     @GetMapping("/toggle-deletion/{id}")
     public String toggleDeletion(@PathVariable Long id) {
         userService.toggleDeletion(id);

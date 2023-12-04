@@ -6,7 +6,6 @@ import bg.pazar.pazarbg.model.enums.ImageType;
 import bg.pazar.pazarbg.model.enums.UserRole;
 import bg.pazar.pazarbg.model.view.OfferViewModel;
 import bg.pazar.pazarbg.repo.CategoryRepository;
-import bg.pazar.pazarbg.repo.MessageRepository;
 import bg.pazar.pazarbg.repo.OfferRepository;
 import bg.pazar.pazarbg.repo.UserRepository;
 import bg.pazar.pazarbg.service.ImageService;
@@ -37,8 +36,6 @@ public class OfferServiceImplTests {
     @Mock
     private UserRepository mockUserRepository;
     @Mock
-    private MessageRepository mockMessageRepository;
-    @Mock
     private AuthenticationService mockAuthenticationService;
     private ModelMapper modelMapper;
     private OfferService offerService;
@@ -54,7 +51,7 @@ public class OfferServiceImplTests {
     @BeforeEach
     void setUp() {
         this.modelMapper = new ModelMapper();
-        this.offerService = new OfferServiceImpl(mockImageService, mockOfferRepository, mockCategoryRepository, mockUserRepository, mockMessageRepository, mockAuthenticationService, modelMapper);
+        this.offerService = new OfferServiceImpl(mockImageService, mockOfferRepository, mockCategoryRepository, mockUserRepository, mockAuthenticationService, modelMapper);
 
         this.testCategory = new Category();
         this.testCategory.setId(1L);
@@ -140,33 +137,6 @@ public class OfferServiceImplTests {
         Assertions.assertEquals(testUser2, actual.getBoughtBy(), "BoughtBy doesn't match");
     }
 
-    @Test
-    void sendMessageTest() {
-        when(mockOfferRepository.findById(testOffer.getId())).thenReturn(Optional.ofNullable(testOffer));
-        when(mockUserRepository.findByUsername(mockAuthenticationService.getCurrentUserName())).thenReturn(testUser2);
-
-        Message actual = offerService.sendMessage(1L, testMessage.getContent());
-
-        Assertions.assertEquals(testMessage.getContent(), actual.getContent(), "Message contents don't match");
-        Assertions.assertEquals(testMessage.getFrom(), actual.getFrom(), "Message senders don't match");
-        Assertions.assertEquals(testMessage.getTo(), actual.getTo(), "Message receivers don't match");
-        Assertions.assertEquals(testMessage.getOffer(), actual.getOffer(), "Message offers don't match");
-        Assertions.assertFalse(actual.isReply(), "Message should not be marked as a reply");
-    }
-
-    @Test
-    void replyToMessageTest() {
-        when(mockMessageRepository.findById(testMessage.getId())).thenReturn(Optional.ofNullable(testMessage));
-        when(mockUserRepository.findByUsername(mockAuthenticationService.getCurrentUserName())).thenReturn(testUser);
-
-        Message actual = offerService.replyToMessage(1L, testMessage.getContent());
-
-        Assertions.assertEquals(testMessage.getContent(), actual.getContent(), "Message contents don't match");
-        Assertions.assertEquals(testMessage.getTo(), actual.getFrom(), "Message senders don't match");
-        Assertions.assertEquals(testMessage.getFrom(), actual.getTo(), "Message receivers don't match");
-        Assertions.assertEquals(testMessage.getOffer(), actual.getOffer(), "Message offers don't match");
-        Assertions.assertTrue(actual.isReply(), "Message should be marked as a reply");
-    }
     @Test
     void generateViewModelForOfferTest() {
         OfferViewModel actual = offerService.generateViewModelForOffer(testOffer);

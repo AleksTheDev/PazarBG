@@ -24,15 +24,15 @@ public class UserController {
         this.userService = userService;
     }
 
+    //Get mapping for login
     @GetMapping("/login")
     public String login() {
         return "login";
     }
 
+    //Post mapping for login-error
     @PostMapping("/login-error")
-    public String onFailure(
-            @ModelAttribute("username") String username,
-            Model model) {
+    public String onFailure(@ModelAttribute("username") String username, Model model) {
 
         model.addAttribute("username", username);
         model.addAttribute("bad_credentials", "true");
@@ -40,9 +40,11 @@ public class UserController {
         return "login";
     }
 
+    //Get mapping for register page
     @GetMapping("/register")
     public String register(Model model) {
-        if(!model.containsAttribute("userRegisterBindingModel")) {
+        //Add binding model
+        if (!model.containsAttribute("userRegisterBindingModel")) {
             model.addAttribute("userRegisterBindingModel", new UserRegisterBindingModel());
         }
 
@@ -52,19 +54,23 @@ public class UserController {
     @PostMapping("/register")
     public ModelAndView register(@Valid @ModelAttribute("userRegisterBindingModel") UserRegisterBindingModel userRegisterBindingModel, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
-        if(bindingResult.hasErrors()) {
+        //Validation
+        if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("userRegisterBindingModel", userRegisterBindingModel);
             redirectAttributes.addFlashAttribute(BINDING_RESULT_PATH, bindingResult);
             return new ModelAndView("register");
         }
 
+        //Try to register user
         RegistrationResult result = userService.register(userRegisterBindingModel);
 
-        if(result != RegistrationResult.OK) {
+        //Handle registration result
+        if (result != RegistrationResult.OK) {
             ModelAndView modelAndView = new ModelAndView("register");
-            if(result == RegistrationResult.USERNAME_TAKEN) modelAndView.addObject("usernameTaken", true);
-            if(result == RegistrationResult.EMAIL_TAKEN) modelAndView.addObject("emailTaken", true);
-            if(result == RegistrationResult.PASSWORDS_DO_NOT_MATCH) modelAndView.addObject("passwordsDoNotMatch", true);
+            if (result == RegistrationResult.USERNAME_TAKEN) modelAndView.addObject("usernameTaken", true);
+            if (result == RegistrationResult.EMAIL_TAKEN) modelAndView.addObject("emailTaken", true);
+            if (result == RegistrationResult.PASSWORDS_DO_NOT_MATCH)
+                modelAndView.addObject("passwordsDoNotMatch", true);
 
             modelAndView.addObject("bindingModel", userRegisterBindingModel);
 

@@ -52,6 +52,9 @@ public class UserEntity {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "from")
     private Set<Message> sentMessages;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "to")
+    private Set<Message> receivedMessages;
+
     public UserEntity() {
         this.offers = new HashSet<>();
         this.boughtOffers = new HashSet<>();

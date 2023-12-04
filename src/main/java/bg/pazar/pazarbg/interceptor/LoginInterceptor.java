@@ -10,15 +10,18 @@ import org.springframework.web.util.UrlPathHelper;
 public class LoginInterceptor implements HandlerInterceptor {
     final UrlPathHelper urlPathHelper = new UrlPathHelper();
 
+    //Redirect requests for /login to /users/login
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        if ( "/login".equals(urlPathHelper.getLookupPathForRequest(request))){
+        //If requested url is /login
+        if ("/login".equals(urlPathHelper.getLookupPathForRequest(request))) {
 
+            //Redirect to /users/login
             String encodedRedirectURL = response.encodeRedirectURL("/users/login");
             response.setStatus(HttpServletResponse.SC_FOUND);
             response.setHeader("Location", encodedRedirectURL);
             return false;
-        } else{
+        } else {
             return true;
         }
     }

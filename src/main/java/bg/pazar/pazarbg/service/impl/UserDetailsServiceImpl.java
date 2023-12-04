@@ -16,15 +16,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    //Get user details for Spring Security
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByUsername(username);
-        if(userEntity != null) {
-            return User
-                    .withUsername(userEntity.getUsername())
-                    .password(userEntity.getPassword())
-                    .roles(userEntity.getRole().name())
-                    .build();
+        if (userEntity != null) {
+            return User.withUsername(userEntity.getUsername()).password(userEntity.getPassword()).roles(userEntity.getRole().name()).build();
         } else throw new UsernameNotFoundException("User with username " + username + " not found!");
     }
 }

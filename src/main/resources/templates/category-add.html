@@ -28,7 +28,7 @@
                 <label for="description" class="h4 m-2">Description</label>
             </div>
             <textarea th:field="*{description}" th:value="${bindingModel != null ? bindingModel.description : ''}"
-                      th:errorclass="'is-invalid alert-danger'" type="text" class="form-control" id="description"
+                      th:errorclass="'is-invalid alert-danger'" class="form-control" id="description"
                       name="description"></textarea>
             <small th:if="${#fields.hasErrors('description')}"
                    th:errors="*{description}" class="text-danger">Description error message</small>

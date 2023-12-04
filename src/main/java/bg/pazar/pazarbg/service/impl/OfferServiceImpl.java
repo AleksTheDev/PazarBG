@@ -1,12 +1,10 @@
 package bg.pazar.pazarbg.service.impl;
 
-import bg.pazar.pazarbg.exception.MessageNotFoundException;
 import bg.pazar.pazarbg.exception.OfferNotFoundException;
 import bg.pazar.pazarbg.model.dto.offer.AddOfferBindingModel;
 import bg.pazar.pazarbg.model.entity.*;
 import bg.pazar.pazarbg.model.view.OfferViewModel;
 import bg.pazar.pazarbg.repo.CategoryRepository;
-import bg.pazar.pazarbg.repo.MessageRepository;
 import bg.pazar.pazarbg.repo.OfferRepository;
 import bg.pazar.pazarbg.repo.UserRepository;
 import bg.pazar.pazarbg.service.ImageService;
@@ -25,51 +23,60 @@ public class OfferServiceImpl implements OfferService {
     private final OfferRepository offerRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
-    private final MessageRepository messageRepository;
     private final AuthenticationService authenticationService;
     private final ModelMapper modelMapper;
 
-    public OfferServiceImpl(ImageService imageService, OfferRepository offerRepository, CategoryRepository categoryRepository, UserRepository userRepository, MessageRepository messageRepository, AuthenticationService authenticationService, ModelMapper modelMapper) {
+    public OfferServiceImpl(ImageService imageService, OfferRepository offerRepository, CategoryRepository categoryRepository, UserRepository userRepository, AuthenticationService authenticationService, ModelMapper modelMapper) {
         this.imageService = imageService;
         this.offerRepository = offerRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
-        this.messageRepository = messageRepository;
         this.authenticationService = authenticationService;
         this.modelMapper = modelMapper;
     }
 
+    //Add offer
     @Override
     public Offer addOffer(AddOfferBindingModel addOfferBindingModel) throws IOException {
         Offer offer = modelMapper.map(addOfferBindingModel, Offer.class);
 
         offer.setCategory(categoryRepository.findByName(addOfferBindingModel.getCategory()));
 
+        //Set author to the logged-in user
         UserEntity user = userRepository.findByUsername(authenticationService.getCurrentUserName());
 
         offer.setCreatedBy(user);
 
+        //Save offer entity to database to generate id
         offer = offerRepository.save(offer);
 
+        //Save the images for the offer
         imageService.saveImages(addOfferBindingModel.getImages(), offer, user);
 
+        //Save the offer entity to database
         offerRepository.save(offer);
 
+        //Return the offer entity for testing
         return offer;
     }
 
+    //Buy offer
     @Override
     public Offer buyOffer(Long id) {
+        //Check if offer exists
         Offer offer = offerRepository.findById(id).orElse(null);
-        if(offer == null) throw new OfferNotFoundException();
-        if(offer.getBoughtBy() != null) throw new OfferNotFoundException();
+        if (offer == null) throw new OfferNotFoundException();
+        if (offer.getBoughtBy() != null) throw new OfferNotFoundException();
 
+        //Set the buyer to the logged-in user
         UserEntity buyer = userRepository.findByUsername(authenticationService.getCurrentUserName());
 
-        if(offer.getCreatedBy().getUsername().equals(buyer.getUsername())) return null;
+        //Check if user is trying to buy his own offer
+        if (offer.getCreatedBy().getUsername().equals(buyer.getUsername())) return null;
 
         offer.setBoughtBy(buyer);
 
+        //Add offer to user's bought offers
         Set<Offer> boughtOffers = buyer.getBoughtOffers();
         boughtOffers.add(offer);
         buyer.setBoughtOffers(boughtOffers);
@@ -77,60 +84,11 @@ public class OfferServiceImpl implements OfferService {
         offerRepository.save(offer);
         userRepository.save(buyer);
 
+        //Return offer entity for testing
         return offer;
     }
 
-    @Override
-    public Message sendMessage(Long offerID, String content) {
-        if(content.length() < 10 || content.length() > 200) return null;
-
-        Offer offer = offerRepository.findById(offerID).orElse(null);
-        if(offer == null) throw new OfferNotFoundException();
-
-        UserEntity from = userRepository.findByUsername(authenticationService.getCurrentUserName());
-        UserEntity to = offer.getCreatedBy();
-
-        if(from.getUsername().equals(to.getUsername())) return null;
-
-        Message message = new Message();
-
-        message.setFrom(from);
-        message.setTo(to);
-        message.setOffer(offer);
-        message.setContent(content);
-        message.setReply(false);
-
-        messageRepository.save(message);
-
-        return message;
-    }
-
-    @Override
-    public Message replyToMessage(Long messageID, String content) {
-        if(content.length() < 10 || content.length() > 200) return null;
-
-        Message originalMessage = messageRepository.findById(messageID).orElse(null);
-        if(originalMessage == null) throw new MessageNotFoundException();
-        if(originalMessage.isReply()) throw new MessageNotFoundException();
-
-        UserEntity from = userRepository.findByUsername(authenticationService.getCurrentUserName());
-        UserEntity to = originalMessage.getFrom();
-
-        if(from.getUsername().equals(to.getUsername())) return null;
-
-        Message message = new Message();
-
-        message.setFrom(from);
-        message.setTo(to);
-        message.setOffer(originalMessage.getOffer());
-        message.setContent(content);
-        message.setReply(true);
-
-        messageRepository.save(message);
-
-        return message;
-    }
-
+    //Get all offers' view models for the homepage
     @Override
     public List<OfferViewModel> getAllOffersViewModels() {
         List<Offer> offers = offerRepository.findAllByBoughtByIsNull();
@@ -141,6 +99,7 @@ public class OfferServiceImpl implements OfferService {
         return models;
     }
 
+    //Get bought offers' view models for the bought offers page
     @Override
     public List<OfferViewModel> getBoughtOffersViewModels() {
         UserEntity currentUser = userRepository.findByUsername(authenticationService.getCurrentUserName());
@@ -153,6 +112,7 @@ public class OfferServiceImpl implements OfferService {
         return models;
     }
 
+    //Get offers' view models from a specific category
     @Override
     public List<OfferViewModel> getAllOffersViewModelsByCategory(Category category) {
         Set<Offer> offers = category.getOffers();
@@ -180,7 +140,7 @@ public class OfferServiceImpl implements OfferService {
 
         model.setImagesIds(imagesIds);
 
-        if(offer.getCreatedBy().getUsername().equals(authenticationService.getCurrentUserName())) {
+        if (offer.getCreatedBy().getUsername().equals(authenticationService.getCurrentUserName())) {
             model.setUserOfferCreator(true);
         }
 

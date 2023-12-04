@@ -7,6 +7,8 @@ import bg.pazar.pazarbg.model.entity.UserEntity;
 import bg.pazar.pazarbg.model.enums.UserRole;
 import bg.pazar.pazarbg.model.view.MessageViewModel;
 import bg.pazar.pazarbg.repo.MessageRepository;
+import bg.pazar.pazarbg.repo.OfferRepository;
+import bg.pazar.pazarbg.repo.UserRepository;
 import bg.pazar.pazarbg.service.MessageService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.when;
 
@@ -28,10 +31,15 @@ public class MessageServiceImplTests {
     @Mock
     private MessageRepository mockMessageRepository;
 
+    @Mock
+    private OfferRepository mockOfferRepository;
+
+    @Mock
+    private UserRepository mockUserRepository;
+
     private MessageService messageService;
 
     private Message testMessage;
-
     private UserEntity testUser;
     private UserEntity testUser2;
     private Category testCategory;
@@ -39,7 +47,7 @@ public class MessageServiceImplTests {
 
     @BeforeEach
     void setUp() {
-        this.messageService = new MessageServiceImpl(mockAuthenticationService, mockMessageRepository);
+        this.messageService = new MessageServiceImpl(mockAuthenticationService, mockMessageRepository, mockOfferRepository, mockUserRepository);
 
         this.testUser = new UserEntity();
         this.testUser.setUsername("Alex");
@@ -75,6 +83,34 @@ public class MessageServiceImplTests {
         this.testMessage.setFrom(testUser2);
         this.testMessage.setTo(testUser);
         this.testMessage.setOffer(testOffer);
+    }
+
+    @Test
+    void sendMessageTest() {
+        when(mockOfferRepository.findById(testOffer.getId())).thenReturn(Optional.ofNullable(testOffer));
+        when(mockUserRepository.findByUsername(mockAuthenticationService.getCurrentUserName())).thenReturn(testUser2);
+
+        Message actual = messageService.sendMessage(1L, testMessage.getContent());
+
+        Assertions.assertEquals(testMessage.getContent(), actual.getContent(), "Message contents don't match");
+        Assertions.assertEquals(testMessage.getFrom(), actual.getFrom(), "Message senders don't match");
+        Assertions.assertEquals(testMessage.getTo(), actual.getTo(), "Message receivers don't match");
+        Assertions.assertEquals(testMessage.getOffer(), actual.getOffer(), "Message offers don't match");
+        Assertions.assertFalse(actual.isReply(), "Message should not be marked as a reply");
+    }
+
+    @Test
+    void replyToMessageTest() {
+        when(mockMessageRepository.findById(testMessage.getId())).thenReturn(Optional.ofNullable(testMessage));
+        when(mockUserRepository.findByUsername(mockAuthenticationService.getCurrentUserName())).thenReturn(testUser);
+
+        Message actual = messageService.replyToMessage(1L, testMessage.getContent());
+
+        Assertions.assertEquals(testMessage.getContent(), actual.getContent(), "Message contents don't match");
+        Assertions.assertEquals(testMessage.getTo(), actual.getFrom(), "Message senders don't match");
+        Assertions.assertEquals(testMessage.getFrom(), actual.getTo(), "Message receivers don't match");
+        Assertions.assertEquals(testMessage.getOffer(), actual.getOffer(), "Message offers don't match");
+        Assertions.assertTrue(actual.isReply(), "Message should be marked as a reply");
     }
 
     @Test

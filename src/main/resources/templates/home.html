@@ -40,13 +40,13 @@
 
                 <div class="carousel-inner h-100 d-flex align-items-center">
                     <div class="carousel-item active offer-carousel">
-                        <img th:src="@{${'/offer/image/' + offer.getFirstImageId()}}"
+                        <img th:src="@{${'/image/' + offer.getFirstImageId()}}"
                              class="d-block offer-image mx-auto"
                              alt="Offer first image">
                     </div>
                     <div th:if="${offer.getImagesIds().size() > 0}"
                          th:each="imageID : ${offer.getImagesIds()}" class="carousel-item offer-carousel">
-                        <img th:src="@{${'/offer/image/' + imageID}}" class="d-block offer-image mx-auto"
+                        <img th:src="@{${'/image/' + imageID}}" class="d-block offer-image mx-auto"
                              alt="Offer image">
                     </div>
                 </div>
@@ -73,10 +73,11 @@
             <hr class="m-2 border border-1 border-dark opacity-75"/>
             <h4 class="p-1 mx-1 my-0">Description:</h4>
             <h4 class="normal-font-weight text-break px-2 py-1" th:text="${offer.description}"></h4>
+            <h4 class="p-1 mx-1 my-0" th:text="${'Added by: ' + offer.getCreatedBy()}"></h4>
             <hr class="m-2 mb-3 border border-1 border-dark opacity-75"/>
             <div class="w-100 d-flex justify-content-center align-items-center mb-1">
                 <button th:unless="${offer.isUserOfferCreator() || boughtOffersMode != null}" class="btn btn-primary shadow mx-2">
-                    <a th:href="@{/offer/buy/{id}(id=${offer.getId()})}" class="no-link-underline text-white h4">Buy
+                    <a th:href="@{/offers/buy/{id}(id=${offer.getId()})}" class="no-link-underline text-white h4">Buy
                         offer</a>
                 </button>
                 <h4 class="p-1 mx-1 my-0" th:text="${'Category: ' + offer.getCategory()}"></h4>
@@ -87,7 +88,7 @@
                 <h4 class="p-0 mx-2 my-0 normal-font-weight text-break">Minimum 10 characters, maximum 200
                     characters</h4>
                 <form
-                        th:action="@{/offer/message/{id}(id=${offer.getId()})}"
+                        th:action="@{/messages/send/{id}(id=${offer.getId()})}"
                         th:method="POST" class="d-flex justify-content-center mx-2 my-2">
 
                     <textarea class="form-control" id="message" name="message"></textarea>

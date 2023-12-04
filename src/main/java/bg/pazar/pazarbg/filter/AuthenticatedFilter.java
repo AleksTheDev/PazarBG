@@ -17,15 +17,19 @@ public class AuthenticatedFilter implements Filter {
         this.authenticationService = authenticationService;
     }
 
+    //Reroute logged-in users to the homepage
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest servletRequest = (HttpServletRequest) request;
         HttpServletResponse servletResponse = (HttpServletResponse) response;
 
+        //Get requested url
         String requestURI = servletRequest.getRequestURI();
 
+        //If requested url matches the login or register page, and user is logged-in
         if ((requestURI.equals("/users/login") || requestURI.equals("/users/register")) && authenticationService.isAuthenticated()) {
 
+            //Redirect to the homepage
             String encodedRedirectURL = ((HttpServletResponse) response).encodeRedirectURL("/home");
 
             servletResponse.setStatus(HttpServletResponse.SC_FOUND);

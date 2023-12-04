@@ -9,7 +9,8 @@ import java.io.IOException;
 public interface FileService {
     void saveImageToDisk(Image image, byte[] bytes) throws IOException;
 
-    void deleteUserImages(UserEntity user) throws IOException;
+
+    boolean deleteImage(Image image) throws IOException;
 
     String formatImagePath(Image image, String filename) throws IllegalArgumentException;
 

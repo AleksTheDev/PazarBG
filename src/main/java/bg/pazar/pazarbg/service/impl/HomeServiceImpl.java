@@ -22,10 +22,12 @@ public class HomeServiceImpl implements HomeService {
         this.categoryRepository = categoryRepository;
     }
 
+    //Get view model for the homepage
     @Override
     public HomeViewModel getAllOffers() {
         HomeViewModel model = new HomeViewModel();
 
+        //Current category is null, because there is no selected category
         model.setCurrentCategory(null);
         model.setCategories(categoryService.getAllCategoriesViewModels());
         model.setOffers(offerService.getAllOffersViewModels());
@@ -33,10 +35,12 @@ public class HomeServiceImpl implements HomeService {
         return model;
     }
 
+    //Get view model for the bought offers page
     @Override
     public HomeViewModel getBoughtOffers() {
         HomeViewModel model = new HomeViewModel();
 
+        //No need to add view models for the categories
         model.setCurrentCategory(null);
         model.setCategories(null);
         model.setOffers(offerService.getBoughtOffersViewModels());
@@ -44,6 +48,7 @@ public class HomeServiceImpl implements HomeService {
         return model;
     }
 
+    //Get view model for the homepage when a category is selected
     @Override
     public HomeViewModel getOffersByCategory(Long id) {
         Category category = categoryRepository.findById(id).orElse(null);

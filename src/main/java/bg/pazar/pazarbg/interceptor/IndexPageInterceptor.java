@@ -16,10 +16,15 @@ public class IndexPageInterceptor implements HandlerInterceptor {
         this.authenticationService = authenticationService;
     }
 
+    //Redirect logged-in users from the index page to the homepage
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        //Get requested url
         String requestPath = urlPathHelper.getLookupPathForRequest(request);
+
+        //If requested url matches / and user is logged-in
         if (requestPath.equals("/") && authenticationService.isAuthenticated()) {
+            //Redirect to the homepage
             String encodedRedirectURL = response.encodeRedirectURL("/home");
             response.setStatus(HttpServletResponse.SC_FOUND);
             response.setHeader("Location", encodedRedirectURL);

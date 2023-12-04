@@ -29,20 +29,25 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    //Register user
     @Override
     public RegistrationResult register(UserRegisterBindingModel userRegisterBindingModel) {
+        //Check if username is taken
         if (userRepository.findByUsername(userRegisterBindingModel.getUsername()) != null) {
             return RegistrationResult.USERNAME_TAKEN;
         }
 
+        //Check if email is taken
         if (userRepository.findByEmail(userRegisterBindingModel.getEmail()) != null) {
             return RegistrationResult.EMAIL_TAKEN;
         }
 
+        //Check if password and confirm password match
         if (!userRegisterBindingModel.getPassword().equals(userRegisterBindingModel.getConfirmPassword())) {
             return RegistrationResult.PASSWORDS_DO_NOT_MATCH;
         }
 
+        //Create user entity
         UserEntity user = new UserEntity();
         user.setUsername(userRegisterBindingModel.getUsername());
         user.setEmail(userRegisterBindingModel.getEmail());
@@ -50,29 +55,38 @@ public class UserServiceImpl implements UserService {
         user.setRole(UserRole.USER);
         user.setMarkedForDeletion(false);
 
+        //Save user entity to database
         userRepository.save(user);
 
+        //Return user entity for testing
         return RegistrationResult.OK;
     }
 
+    //Toggle use role
     @Override
     public void toggleRole(Long id) {
+        //Check if user exists
         UserEntity user = userRepository.findById(id).orElse(null);
         if(user == null) throw new UserNotFoundException();
 
+        //Set the user's role to the opposite of the current role
         if(user.getRole().name().equals(UserRole.USER.name())) user.setRole(UserRole.ADMIN);
         else user.setRole(UserRole.USER);
 
+        //Save user to database
         userRepository.save(user);
     }
 
     @Override
     public void toggleDeletion(Long id) {
+        //Check if user exists
         UserEntity user = userRepository.findById(id).orElse(null);
         if(user == null) throw new UserNotFoundException();
 
+        //Toggle the marker's state
         user.setMarkedForDeletion(!user.isMarkedForDeletion());
 
+        //Save user to database
         userRepository.save(user);
     }
 

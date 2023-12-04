@@ -2,7 +2,6 @@ package bg.pazar.pazarbg.controller;
 
 import bg.pazar.pazarbg.model.view.HomeViewModel;
 import bg.pazar.pazarbg.service.HomeService;
-import bg.pazar.pazarbg.service.MessageService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,13 +12,12 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/home")
 public class HomeController {
     private final HomeService homeService;
-    private final MessageService messageService;
 
-    public HomeController(HomeService homeService, MessageService messageService) {
+    public HomeController(HomeService homeService) {
         this.homeService = homeService;
-        this.messageService = messageService;
     }
 
+    //Get mapping for homepage
     @GetMapping
     public ModelAndView home() {
         ModelAndView modelAndView = new ModelAndView("home");
@@ -31,6 +29,7 @@ public class HomeController {
         return modelAndView;
     }
 
+    //Get mapping for bought offers
     @GetMapping("/bought")
     public ModelAndView bought() {
         ModelAndView modelAndView = new ModelAndView("home");
@@ -43,15 +42,7 @@ public class HomeController {
         return modelAndView;
     }
 
-    @GetMapping("/messages")
-    public ModelAndView messages() {
-        ModelAndView modelAndView = new ModelAndView("messages");
-
-        modelAndView.addObject("messages", messageService.getAllMessagesViewModels());
-
-        return modelAndView;
-    }
-
+    //Get mapping for showing offers of a specific category
     @GetMapping("/category/{id}")
     public ModelAndView home(@PathVariable("id") Long id) {
         ModelAndView modelAndView = new ModelAndView("home");

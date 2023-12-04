@@ -21,12 +21,14 @@ public class CategoryServiceImpl implements CategoryService {
         this.modelMapper = modelMapper;
     }
 
+    //Add category
     @Override
     public void addCategory(AddCategoryBindingModel addCategoryBindingModel) {
         Category category = modelMapper.map(addCategoryBindingModel, Category.class);
         categoryRepository.save(category);
     }
 
+    //Get all categories' names for the add offer page
     @Override
     public List<String> getAllCategoryNames() {
         List<String> categoryNames = new ArrayList<>();
@@ -36,6 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryNames;
     }
 
+    //Get view models for all categories
     @Override
     public List<CategoryViewModel> getAllCategoriesViewModels() {
         List<Category> categories = categoryRepository.findAll();
@@ -46,6 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
         return models;
     }
 
+    //Get view model for a given category
     @Override
     public CategoryViewModel getCategoryViewModel(Category category) {
         return modelMapper.map(category, CategoryViewModel.class);
