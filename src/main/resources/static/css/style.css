@@ -122,8 +122,9 @@ main {
 }
 
 .offer-image {
-    max-width: 396px;
-    max-height: 396px;
+    width: 396px;
+    height: 396px;
+    object-fit: contain;
 }
 
 @media (max-width: 430px) {

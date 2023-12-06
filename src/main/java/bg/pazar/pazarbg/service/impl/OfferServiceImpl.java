@@ -94,7 +94,10 @@ public class OfferServiceImpl implements OfferService {
         List<Offer> offers = offerRepository.findAllByBoughtByIsNull();
         List<OfferViewModel> models = new ArrayList<>();
 
-        offers.forEach(offer -> models.add(generateViewModelForOffer(offer)));
+        offers.forEach(offer -> {
+            OfferViewModel model = generateViewModelForOffer(offer);
+            if(model != null) models.add(model);
+        });
 
         return models;
     }
@@ -107,7 +110,10 @@ public class OfferServiceImpl implements OfferService {
         List<Offer> offers = offerRepository.findAllByBoughtBy(currentUser);
         List<OfferViewModel> models = new ArrayList<>();
 
-        offers.forEach(offer -> models.add(generateViewModelForOffer(offer)));
+        offers.forEach(offer -> {
+            OfferViewModel model = generateViewModelForOffer(offer);
+            if(model != null) models.add(model);
+        });
 
         return models;
     }
@@ -119,7 +125,10 @@ public class OfferServiceImpl implements OfferService {
         List<OfferViewModel> models = new ArrayList<>();
 
         offers.forEach(offer -> {
-            if (offer.getBoughtBy() == null) models.add(generateViewModelForOffer(offer));
+            if (offer.getBoughtBy() == null) {
+                OfferViewModel model = generateViewModelForOffer(offer);
+                if(model != null) models.add(model);
+            }
         });
 
         return models;
@@ -131,6 +140,8 @@ public class OfferServiceImpl implements OfferService {
 
         model.setCreatedBy(offer.getCreatedBy().getUsername());
         model.setCategory(offer.getCategory().getName());
+
+        if(offer.getImages().isEmpty()) return null;
 
         List<Long> imagesIds = new ArrayList<>(offer.getImages().stream().map(Image::getId).toList());
 
