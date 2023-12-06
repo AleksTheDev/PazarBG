@@ -30,7 +30,7 @@ public class HomeServiceImpl implements HomeService {
         //Current category is null, because there is no selected category
         model.setCurrentCategory(null);
         model.setCategories(categoryService.getAllCategoriesViewModels());
-        model.setOffers(offerService.getAllOffersViewModels());
+        model.setOffers(offerService.getAllOffersViewModels().reversed());
 
         return model;
     }
@@ -43,7 +43,7 @@ public class HomeServiceImpl implements HomeService {
         //No need to add view models for the categories
         model.setCurrentCategory(null);
         model.setCategories(null);
-        model.setOffers(offerService.getBoughtOffersViewModels());
+        model.setOffers(offerService.getBoughtOffersViewModels().reversed());
 
         return model;
     }
@@ -58,7 +58,7 @@ public class HomeServiceImpl implements HomeService {
 
         model.setCurrentCategory(categoryService.getCategoryViewModel(category));
         model.setCategories(categoryService.getAllCategoriesViewModels());
-        model.setOffers(offerService.getAllOffersViewModelsByCategory(category));
+        model.setOffers(offerService.getAllOffersViewModelsByCategory(category).reversed());
 
         return model;
     }

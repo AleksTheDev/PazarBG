@@ -115,6 +115,6 @@ public class MessageServiceImpl implements MessageService {
             models.add(model);
         });
 
-        return models;
+        return models.reversed();
     }
 }
