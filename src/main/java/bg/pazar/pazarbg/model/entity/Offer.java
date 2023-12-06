@@ -23,6 +23,7 @@ public class Offer {
     private String title;
 
     @NotNull
+    @Lob
     private String description;
 
     @NotNull

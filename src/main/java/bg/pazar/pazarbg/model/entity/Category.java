@@ -22,6 +22,7 @@ public class Category {
     private String name;
 
     @NotNull
+    @Lob
     private String description;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "category")
