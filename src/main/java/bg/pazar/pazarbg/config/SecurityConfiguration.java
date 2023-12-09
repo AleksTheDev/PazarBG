@@ -22,6 +22,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/users/login", "/users/register", "/users/login-error").permitAll()
                         .requestMatchers("/error").permitAll()
+                        // Allow only administrators to access admin features
                         .requestMatchers("/admin/**").hasRole(UserRole.ADMIN.name())
                         // all other requests are authenticated.
                         .anyRequest().authenticated()
